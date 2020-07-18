@@ -1,0 +1,124 @@
+from Bio import SeqIO
+from Bio import Entrez
+Entrez.email = "sabanawaz099@gmail.com"  # Always tell NCBI who you are
+handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
+record = SeqIO.read(handle, "genbank")
+print("\n ****Retriving the record of given nucleotide****\n")
+#retriving the id of the particular nucleotide
+print("ID of nucleotide:  ",record.id)
+
+#give description about organisum name with gene
+print("\nDescription of nucleotide:  ",record.description)
+
+#this function return the number of feature
+print("\nLenght of nucleotide:  ",len(record.features))
+
+#record.features show all the record related to features and it takes string and return list
+print("\nDetailed features of nucleotide:  ",(record.features))
+
+print("\nDescription of sequence:  ",(record.seq))
+#repr method returns a printable representational string of the given object
+print("\nSequence of nucleotide",repr(record.seq))
+
+22222///////////////////
+
+import os
+from Bio import SeqIO
+from Bio import Entrez
+Entrez.email = "sabanawaz099@gmail.com"  # Always tell NCBI who you are
+filename = "EU490707.gbk"
+#isfile is a boolean function return true or false is checks whether given path is present or not
+if not os.path.isfile(filename):
+    # Downloading...
+    net_handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="bold", retmode="text")
+    #open the file in reading mode
+    out_handle = open(filename, "r")
+    #using handler open the downloaded file
+    out_handle.read(net_handle.read())
+    out_handle.close()
+    net_handle.close()
+    print("Saved")
+print("==========================================Parsing=================================================")
+record = SeqIO.read(filename, "genbank")
+print("\n****Fasta Sequence****\n\n",record.format("fasta"))
+print("\n$$$$$$$$Writing the sequence in upper case$$$$$$$$$\n\n",record.upper())
+print("\n%%%%%%%% Sequence of nucleotide %%%%%%%%%%%\n\n",record.seq)
+
+333////////////
+
+from Bio import Entrez
+Entrez.email = "sabanawaz099@gmail.com"  # Always tell NCBI who you are
+handle = Entrez.efetch(db="nucleotide", id="EU490707", retmode="xml")
+#read the record of handle
+record = Entrez.read(handle)
+handle.close()
+#parsing the list Element
+print("\n====================Retriving Complete Record in xml Formate=====================\n")
+print(record)
+#Selecting element from dictionary
+print("\n%%%%%%%%%%%%%%%%%--- Retriving the Selected Record ---%%%%%%%%%%%%%%%%%\n")
+print("\n1- Information about organisum and gene: ",record[0]["GBSeq_definition"])
+print("2- GBSeq_topology:  ",record[0]["GBSeq_topology"])
+print("3- Length of sequence:  ",record[0]["GBSeq_length"])
+print("4- GBSeq_taxonomy",record[0]["GBSeq_taxonomy"])
+
+4////////egquerty
+
+Entrez.email = "sabanawaz099@gmail.com"  # Always tell NCBI who you are
+#Used to find nucleotide entries for an entry in the gene database
+#Enter the pub med id to find record of search item
+#A particular id is search for how many times
+pmid=input("\n%%%%%%  Enter Pubmed id  %%%%%%\n")
+#Return list of dictionary
+record = Entrez.read(Entrez.elink(db="pubmed", id=pmid))
+#retrive record of a particular item in dictionary
+print(record[0]["DbFrom"])
+print(len(record[0]["LinkSetDb"]))
+for linksetdb in record[0]["LinkSetDb"]:
+    #key contains the search results, stored as a list consisting of one item for each target database
+    #only find hits in the PubMed database
+    #The actual search results are stored as under the "Link" key.
+    print(linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"]))
+print(record[0]["LinkSetDb"][0]["Link"][0])
+print(record[0]["LinkSetDb"][0]["Link"][1])
+for link in record[0]["LinkSetDb"][0]["Link"]:
+ print(link["Id"])
+5////////////////
+from Bio import Entrez
+Entrez.email = "sabanawaz099@gmail.com"  # Always tell NCBI who you are
+spell_check=input("\n********Enter the Word*********\n")
+#check small spell mistakes
+handle = Entrez.espell(term=spell_check)
+record = Entrez.read(handle)
+#use pubmed database to correct the spell
+print("Complete Record: ",record)
+print("Entered Query: ",record["Query"])
+print("Corrected Query: ",record["CorrectedQuery"])
+
+6///////////////////////
+import os
+from Bio import SeqIO
+from Bio import Entrez
+Entrez.email = "sabanawaz099@gmail.com"  # Always tell NCBI who you are
+filename = "EU490707.gbk"
+#isfile is a boolean function return true or false is checks whether given path is present or not
+if os.path.isfile(filename):
+    print("please enter the file id, Current id is not preasent in your operating system")
+else:
+    # Downloading...
+    net_handle = Entrez.efetch(db="nucleotide", id=filename, rettype="gb", retmode="text")
+    #open the file in reading mode
+    out_handle = open(filename, "r")
+    #using handler open the downloaded file
+    out_handle.read(net_handle.read())
+    out_handle.close()
+    net_handle.close()
+    print("Saved")
+    print("==========================================Parsing=================================================")
+    record = SeqIO.read(filename, "genbank")
+print("\n****Fasta Sequence****\n\n",record.format("fasta"))
+print("\n$$$$$$$$Writing the sequence in upper case$$$$$$$$$\n\n",record.upper())
+print("\n%%%%%%%% Sequence of nucleotide %%%%%%%%%%%\n\n",record.seq)
+
+
+
